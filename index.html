@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anemia Detection</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://static.vecteezy.com/system/resources/previews/006/712/985/non_2x/abstract-health-medical-science-healthcare-icon-digital-technology-science-concept-modern-innovation-treatment-medicine-on-hi-tech-future-blue-background-for-wallpaper-template-web-design-vector.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .file-upload {
+            background-color: #0078d7;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-upload:hover {
+            background-color: #005a9e;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        #file-name {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .submit-btn {
+            background-color: #34c759;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #28a745;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #0078d7;
+            margin-top: 20px;
+        }
+
+        .confidence {
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        ul {
+            margin-top: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul li {
+            background-color: #f1f3f5;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-align: left;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        ul li::before {
+            content: '\2022';
+            color: #34c759;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-right: 10px;
+        }
+
+        .info {
+            text-align: left;
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .info h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Anemia Detection</h1>
+        <p>Upload an image to detect anemia with AI-powered precision.</p>
+
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <label class="file-upload" for="file">Choose File</label>
+            <input type="file" name="file" id="file" accept="image/*" required>
+            <p id="file-name">No file selected</p>
+            <button type="submit" class="submit-btn">Predict</button>
+        </form>
+
+        {% if image_url %}
+        <div class="image-container">
+            <h3>Uploaded Image:</h3>
+            <img src="{{ image_url }}" alt="Uploaded Image">
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result">Prediction: {{ result }}</div>
+        <div class="confidence">Confidence: {{ confidence }}</div>
+
+        {% if precautions %}
+        <h3>Precautionary Measures:</h3>
+        <ul>
+            {% for precaution in precautions %}
+            <li>{{ precaution }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endif %}
+
+        <div class="info">
+            <h2>What is Anemia?</h2>
+            <p>Anemia is a condition in which your blood lacks enough healthy red blood cells or hemoglobin. Hemoglobin is the part of red blood cells that binds oxygen. If you have anemia, your body does not get enough oxygen-rich blood.</p>
+
+            <h2>Common Symptoms:</h2>
+            <ul>
+                <li>Fatigue and weakness</li>
+                <li>Pale or yellowish skin</li>
+                <li>Irregular heartbeats</li>
+                <li>Shortness of breath</li>
+                <li>Dizziness or lightheadedness</li>
+            </ul>
+
+            <h2>Causes of Anemia:</h2>
+            <p>Anemia can be caused by blood loss, decreased red blood cell production, or increased red blood cell destruction. Iron deficiency is the most common cause.</p>
+        </div>
+    </div>
+
+    <script>
+        // Display selected file name
+        const fileInput = document.getElementById('file');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        fileInput.addEventListener('change', () => {
+            const fileName = fileInput.files[0]?.name || "No file selected";
+            fileNameDisplay.textContent = fileName;
+        });
+    </script>
+</body>
+</html>
